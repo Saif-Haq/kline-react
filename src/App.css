@@ -1,0 +1,11 @@
+/* Dark theme colors  */
+.klinecharts-pro[data-theme="dark"] {
+  --klinecharts-pro-hover-background-color: rgba(22, 119, 255, 0.15);
+  --klinecharts-pro-background-color: #151517;
+  ;
+  --klinecharts-pro-popover-background-color: #1c1c1f;
+  ;
+  --klinecharts-pro-text-color: #F8F8F8;
+  --klinecharts-pro-text-second-color: #929AA5;
+  --klinecharts-pro-border-color: #292929;
+}
