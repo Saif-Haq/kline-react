@@ -1,5 +1,5 @@
 import { CandleType, init, registerIndicator, registerOverlay } from 'klinecharts';
-import { useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import './App.css';
 import { genData } from './utils';
 
@@ -43,14 +43,24 @@ registerIndicator({
 })
 
 registerOverlay({
-
   name: 'circle',
+  // styles: {
+  //   circle: {
+  //     color: "#225522"
+  //   }
+  // },
 
   needDefaultPointFigure: true,
   needDefaultXAxisFigure: true,
   needDefaultYAxisFigure: true,
   totalStep: 3,
+  onDrawEnd: function (event) {
+    // console.log("ODE>>>>>>>>", event)
+    localStorage.setItem("MYEVENT", JSON.stringify(event.overlay))
+    return true;
+  },
   createPointFigures: ({ coordinates }) => {
+    // console.log(coordinates)
     if (coordinates.length === 2) {
       const xDis = Math.abs(coordinates[0].x - coordinates[1].x)
       const yDis = Math.abs(coordinates[0].y - coordinates[1].y)
@@ -64,7 +74,7 @@ registerOverlay({
           r: radius
         },
         styles: {
-          style: 'stroke_fill'
+          style: 'stroke_fill',
         }
       }
     }
@@ -72,6 +82,38 @@ registerOverlay({
   }
 
 })
+
+// registerOverlay({
+//   name: 'circleX',
+
+//   needDefaultPointFigure: true,
+//   needDefaultXAxisFigure: true,
+//   needDefaultYAxisFigure: true,
+//   totalStep: 3,
+//   // onDrawStart: ({ x }) => { console.log("x", x) },
+//   createPointFigures: ({ coordinates }) => {
+//     // console.log("i was here")
+//     // console.log(coordinates)
+//     const myCoords = [{ x: 741.5, y: 363 }, { x: 780, y: 499 }]
+//     const xDis = Math.abs(myCoords[0].x - myCoords[1].x)
+//     const yDis = Math.abs(myCoords[0].y - myCoords[1].y)
+//     const radius = Math.sqrt(xDis * xDis + yDis * yDis)
+
+//     return {
+//       key: 'circleX',
+//       type: 'circleX',
+//       attrs: {
+//         coordinates: myCoords,
+//         r: radius
+//       },
+//       styles: {
+//         style: 'stroke_fill'
+//       }
+//     }
+//     return []
+//   }
+
+// })
 
 function App() {
 
@@ -130,6 +172,7 @@ function App() {
       button.addEventListener('click', () => { chart.createOverlay("circle") })
       buttonContainer.appendChild(button)
 
+      // chart.createOverlay("circleX")
 
       const theme_items = [
         { key: "light", text: 'Light' },
@@ -154,7 +197,13 @@ function App() {
       })
 
       container && container.appendChild(buttonContainer)
+
+      if (localStorage.getItem("MYEVENT")) {
+        console.log(JSON.parse(localStorage.getItem("MYEVENT") || ""))
+        chart.createOverlay(JSON.parse(localStorage.getItem("MYEVENT") || ""))
+      }
     }
+
   });
 
   return (
