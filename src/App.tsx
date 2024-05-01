@@ -203,7 +203,6 @@ function App() {
         chart.createOverlay(JSON.parse(localStorage.getItem("MYEVENT") || ""))
       }
     }
-
   });
 
   return (
